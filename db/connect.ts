@@ -14,12 +14,7 @@ export async function dbConnect() {
     return;
   }
 
-  /* connecting to our database */
-  const db = await mongoose.connect(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-  });
+  const db = await mongoose.connect(url);
 
   connection.isConnected = db.connections[0].readyState;
 }
