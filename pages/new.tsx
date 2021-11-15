@@ -7,8 +7,8 @@ const New = () => {
       <Head>
         <title>New Person</title>
       </Head>
-      <header className="py-4">
-        <h1 className="text-2xl font-bold">Add New Contact</h1>
+      <header>
+        <h1>Add New Contact</h1>
       </header>
 
       <div data-testid="NEW_FORM">

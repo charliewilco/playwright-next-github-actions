@@ -126,7 +126,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
         h1 {
           font-size: 1.5rem;
-          margin-bottom: 0.5rem;
+          margin-bottom: 1rem;
           font-weight: 700;
         }
 
