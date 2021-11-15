@@ -1,9 +1,12 @@
-import Form, { defaultValues } from "../components/Form";
-import Layout from "../components/Layout";
+import Head from "next/head";
+import { Form, defaultValues } from "../components/Form";
 
 const New = () => {
   return (
-    <Layout title="New Person">
+    <div>
+      <Head>
+        <title>New Person</title>
+      </Head>
       <header className="py-4">
         <h1 className="text-2xl font-bold">Add New Contact</h1>
       </header>
@@ -11,7 +14,7 @@ const New = () => {
       <div data-testid="NEW_FORM">
         <Form formId="add-person-form" initialValues={defaultValues} />
       </div>
-    </Layout>
+    </div>
   );
 };
 

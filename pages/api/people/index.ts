@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../db/connect";
-import Person from "../../../db/models";
+import { dbConnect } from "../../../db/connect";
+import { PersonModel } from "../../../db/models";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,7 +13,7 @@ export default async function handler(
   switch (method) {
     case "GET":
       try {
-        const people = await Person.find(
+        const people = await PersonModel.find(
           {}
         ); /* find all the data in our database */
         res.status(200).json({ success: true, data: people });
@@ -23,7 +23,7 @@ export default async function handler(
       break;
     case "POST":
       try {
-        const person = await Person.create(
+        const person = await PersonModel.create(
           req.body
         ); /* create a new model in the database */
         res.status(201).json({ success: true, data: person });

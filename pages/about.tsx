@@ -1,8 +1,11 @@
+import Head from "next/head";
 import Link from "next/link";
-import Layout from "../components/Layout";
 
 const AboutPage = () => (
-  <Layout title="About | Next.js + TypeScript Example">
+  <div>
+    <Head>
+      <title>About | Next.js + TypeScript Example</title>
+    </Head>
     <h1 data-testid="ABOUT_TITLE" className="text-3xl font-bold mb-8">
       About
     </h1>
@@ -14,7 +17,7 @@ const AboutPage = () => (
         </Link>
       </p>
     </section>
-  </Layout>
+  </div>
 );
 
 export default AboutPage;

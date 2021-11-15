@@ -1,8 +1,7 @@
 import { useRouter } from "next/router";
+import Head from "next/head";
 import useSWR from "swr";
-import Form from "../../components/Form";
-import Layout from "../../components/Layout";
-
+import { Form } from "../../components/Form";
 
 const fetcher = (url: string) =>
   fetch(url)
@@ -22,10 +21,12 @@ const EditPerson = () => {
   };
 
   return (
-    <Layout title="New Person">
-
-    <Form formId="edit-form" initialValues={initialValues} create={false} />
-    </Layout>
+    <div>
+      <Head>
+        <title>Edit {initialValues.name} </title>
+      </Head>
+      <Form formId="edit-form" initialValues={initialValues} create={false} />
+    </div>
   );
 };
 

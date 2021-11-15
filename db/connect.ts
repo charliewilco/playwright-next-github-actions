@@ -8,7 +8,7 @@ interface IConnectionStatus {
 
 const connection: IConnectionStatus = {}; /* creating connection object*/
 
-async function dbConnect() {
+export async function dbConnect() {
   /* check if we have connection to our databse*/
   if (connection.isConnected) {
     return;
@@ -23,5 +23,3 @@ async function dbConnect() {
 
   connection.isConnected = db.connections[0].readyState;
 }
-
-export default dbConnect;
