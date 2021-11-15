@@ -24,12 +24,10 @@ const PersonSchema = new mongoose.Schema<IPerson>({
   },
 });
 
-const PersonModel: mongoose.Model<IPerson> =
+export const PersonModel: mongoose.Model<IPerson> =
   mongoose.models.Person || mongoose.model<IPerson>("Person", PersonSchema);
 
 export type ConvertedPerson = Pick<
   Pick<mongoose._LeanDocument<IPerson>, "_id" | "id" | "name" | "age" | "city">,
   "_id" | "id" | "name" | "age" | "city"
 >;
-
-export default PersonModel;

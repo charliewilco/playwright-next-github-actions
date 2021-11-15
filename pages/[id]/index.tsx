@@ -4,12 +4,12 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import { useRouter } from "next/router";
 import Link from "next/link";
-import dbConnect from "../../db/connect";
-import Person, { ConvertedPerson } from "../../db/models";
-import Layout from "../../components/Layout";
-import Avatar from "../../components/Avatar";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { dbConnect } from "../../db/connect";
+import { PersonModel, ConvertedPerson } from "../../db/models";
+import { Avatar } from "../../components/Avatar";
 
 export const getServerSideProps: GetServerSideProps<
   { person?: ConvertedPerson | null },
@@ -18,7 +18,7 @@ export const getServerSideProps: GetServerSideProps<
   await dbConnect();
 
   if (params?.id) {
-    const person = await Person.findById(params.id).lean();
+    const person = await PersonModel.findById(params.id).lean();
     if (person !== null) {
       person._id = person._id.toString();
     }
@@ -54,53 +54,87 @@ const DetailsPage: NextPage<
   const title = person.name + " | Edit";
 
   return (
-    <Layout title={title}>
-      <div className="bg-white shadow-sm rounded p-4">
-        <div className="card">
-          <div className="mb-4">
-            <Avatar>{person.name[0]}</Avatar>
-          </div>
-          <h1 className="text-2xl mb-4">{person.name}</h1>
+    <div>
+      <Head>
+        <title>{title}</title>
+      </Head>
+      <header>
+        <div>
+          <Avatar>{person.name[0]}</Avatar>
+          <h1>{person.name}</h1>
+        </div>
+        <div>
+          <Link href="/[id]/edit" as={`/${person._id}/edit`} passHref>
+            <button>Edit</button>
+          </Link>
+          <button onClick={handleDelete}>Delete</button>
+        </div>
+      </header>
 
-          <div className="card-header grid gap-6 grid-cols-3">
-            <div>
-              <p className="text-sm text-gray-400 font-bold uppercase mb-2">
-                Age
-              </p>
-              <p className="font-mono text-xl">{person.age}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-400 font-bold uppercase mb-2">
-                City
-              </p>
-              <p className="font-mono text-xl">{person.city}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-400 font-bold uppercase mb-2">
-                Phone #
-              </p>
-              <p className="font-mono text-xl">N/A</p>
-            </div>
+      <div className="card">
+        <div className="grid">
+          <div>
+            <p>{person.age}</p>
+            <span className="label">Age</span>
           </div>
-
-          <div className="border-t border-gray-200 pt-4 mt-4 flex justify-end">
-            <Link href="/[id]/edit" as={`/${person._id}/edit`}>
-              <button className="text-blue-500 text-sm mr-4 font-bold">
-                Edit
-              </button>
-            </Link>
-            <button
-              className="text-red-400 text-sm mr-4 font-bold"
-              onClick={handleDelete}
-            >
-              Delete
-            </button>
+          <div>
+            <p>{person.city}</p>
+            <span className="label">City</span>
+          </div>
+          <div>
+            <p>N/A</p>
+            <span className="label">Phone #</span>
           </div>
         </div>
-
-        {message && <p>{message}</p>}
       </div>
-    </Layout>
+
+      {message && <p>{message}</p>}
+
+      <style jsx>{`
+        header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 2rem;
+        }
+
+        header > div {
+          display: flex;
+          align-items: center;
+        }
+
+        h1 {
+          margin: 0 0 0 1rem;
+        }
+
+        p {
+          font-size: 1.5rem;
+        }
+
+        .label {
+          display: block;
+          font-family: var(--monospace);
+        }
+
+        .grid {
+          display: grid;
+          gap: 2rem;
+          grid-template-columns: 1fr 1fr;
+        }
+
+        button {
+          font-family: var(--sans-serif);
+          appearance: none;
+          font-weight: 700;
+          background: none;
+          border: 0;
+          border-radius: 0;
+          color: var(--highlight);
+          margin-left: 1rem;
+          padding: 0;
+        }
+      `}</style>
+    </div>
   );
 };
 

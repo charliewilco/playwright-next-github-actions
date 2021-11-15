@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../db/connect";
-import Person from "../../../db/models";
+import { dbConnect } from "../../../db/connect";
+import { PersonModel } from "../../../db/models";
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,7 +16,7 @@ export default async function handler(
     switch (method) {
       case "GET" /* Get a model by its ID */:
         try {
-          const person = await Person.findById(id);
+          const person = await PersonModel.findById(id);
           if (!person) {
             return res.status(400).json({ success: false });
           }
@@ -28,7 +28,7 @@ export default async function handler(
 
       case "PUT" /* Edit a model by its ID */:
         try {
-          const person = await Person.findByIdAndUpdate(id, req.body, {
+          const person = await PersonModel.findByIdAndUpdate(id, req.body, {
             new: true,
             runValidators: true,
           });
@@ -43,7 +43,7 @@ export default async function handler(
 
       case "DELETE" /* Delete a model by its ID */:
         try {
-          const deletedPerson = await Person.deleteOne({ _id: id });
+          const deletedPerson = await PersonModel.deleteOne({ _id: id });
           if (!deletedPerson) {
             return res.status(400).json({ success: false });
           }
