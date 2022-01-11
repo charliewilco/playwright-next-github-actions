@@ -3335,10 +3335,10 @@ image-size@1.0.0:
   dependencies:
     queue "6.0.2"
 
-immer@^9.0.7:
-  version "9.0.7"
-  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.7.tgz#b6156bd7db55db7abc73fd2fdadf4e579a701075"
-  integrity sha512-KGllzpbamZDvOIxnmJ0jI840g7Oikx58lBPWV0hUh7dtAyZpFqqrBZdKka5GlTwMTZ1Tjc/bKKW4VSFAt6BqMA==
+immer@^9.0.11:
+  version "9.0.11"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.11.tgz#2d3e5d961c7174a7ad5e3d33f5221cc9f3093aba"
+  integrity sha512-vBKTH7T6jezcwwS6AgIHgBrg3TppJzQJD9SBXSkcp1+y5KqoZlpwPnPJjH3eSfC9giEknexQdP3WOa43iDVU0A==
 
 import-fresh@^3.0.0, import-fresh@^3.2.1:
   version "3.3.0"
