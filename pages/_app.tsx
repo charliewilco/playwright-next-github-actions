@@ -133,8 +133,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         @media (prefers-color-scheme: dark) {
           :root {
             --fg: #fafafa;
-            --bg: #181818;
-            --surface: #0a0a0a;
+            --bg: #0a0a0a;
+            --surface: #181818;
             --highlight: #3b82f6;
           }
         }
