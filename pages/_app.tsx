@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <a data-testid="NEW_LINK" className="new">
               New
             </a>
-          </Link>{" "}
+          </Link>
         </nav>
       </header>
       <main>

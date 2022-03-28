@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Form, defaultValues } from "../components/Form";
+import { Form, defaultValues } from "../components/contact-editor";
 
 const New = () => {
   return (
