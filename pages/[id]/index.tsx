@@ -9,7 +9,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { dbConnect } from "../../db/connect";
 import { PersonModel, ConvertedPerson } from "../../db/models";
-import { Avatar } from "../../components/Avatar";
+import { Avatar } from "../../components/named-avatar";
 
 export const getServerSideProps: GetServerSideProps<
   { person?: ConvertedPerson | null },

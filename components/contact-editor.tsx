@@ -183,7 +183,7 @@ export const Form: React.VFC<IFormProps> = ({
           <button type="submit">Submit</button>
         </div>
       </form>
-      {message && <p data-testid="RESPONSE_MESSAGE">{message}</p>}
+      {message && <p>{message}</p>}
 
       <style jsx>{`
         .root {

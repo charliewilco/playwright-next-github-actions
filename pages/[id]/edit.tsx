@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
 import useSWR from "swr";
-import { Form } from "../../components/Form";
+import { Form } from "../../components/contact-editor";
 
 const fetcher = (url: string) =>
   fetch(url)
