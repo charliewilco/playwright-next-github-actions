@@ -1,21 +1,28 @@
 import { expect, test } from "@playwright/test";
+import { dbConnect, dbDisconnect, dbDrop } from "../db/connect";
+
+test.beforeAll(async () => {
+  await dbConnect();
+  await dbDrop();
+});
+
+test.afterAll(async () => {
+  await dbDisconnect();
+});
 
 test("should find link", async ({ page }) => {
-  await page.goto("http://localhost:3000/");
+  await page.goto("/");
 
-  await page.waitForSelector("[data-testid='ABOUT_LINK']");
-  await page.click("[data-testid='ABOUT_LINK']");
-
-  await page.waitForSelector("[data-testid='ABOUT_TITLE']");
+  await page.click("text=About");
+  await expect(page).toHaveURL("/about");
+  await expect(page.locator("h1")).toContainText("About");
 });
 
 test("should create a new item", async ({ page }) => {
-  await page.waitForSelector("[data-testid='NEW_LINK'");
-  await page.click("[data-testid='NEW_LINK'");
+  await page.goto("/");
+  await page.click("text=New");
+  await expect(page).toHaveURL("/new");
 
-  await page.waitForSelector("[data-testid='NEW_FORM']");
-
-  await page.waitForSelector("input[name='name']");
   await page.type("input[name='name']", "Charlie");
 
   await page.evaluate(() => {
@@ -30,6 +37,7 @@ test("should create a new item", async ({ page }) => {
 
   await page.click("button[type='submit']");
 
-  await page.waitForSelector("[data-testid='LIST_HOME']");
-  await page.waitForSelector("[data-testid='PERSON_CARD']");
+  await expect(page.locator("[data-testid='PERSON_CARD']")).toContainText(
+    "Charlie"
+  );
 });

@@ -15,7 +15,7 @@ const config: PlaywrightTestConfig = {
   // Run your local dev server before starting the tests:
   // https://playwright.dev/docs/test-advanced#launching-a-development-web-server-during-the-tests
   webServer: {
-    command: "npm run dev",
+    command: "npm start",
     port: 3000,
     timeout: 120 * 1000,
     reuseExistingServer: !process.env.CI,
@@ -38,28 +38,6 @@ const config: PlaywrightTestConfig = {
       use: {
         ...devices["Desktop Chrome"],
       },
-    },
-    {
-      name: "Desktop Firefox",
-      use: {
-        ...devices["Desktop Firefox"],
-      },
-    },
-    {
-      name: "Desktop Safari",
-      use: {
-        ...devices["Desktop Safari"],
-      },
-    },
-    {
-      name: "Mobile Chrome",
-      use: {
-        ...devices["Pixel 5"],
-      },
-    },
-    {
-      name: "Mobile Safari",
-      use: devices["iPhone 12"],
     },
   ],
 };

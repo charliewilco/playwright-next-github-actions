@@ -18,3 +18,16 @@ export async function dbConnect() {
 
   connection.isConnected = db.connections[0].readyState;
 }
+
+export async function dbDisconnect() {
+  await mongoose.disconnect();
+}
+
+export async function dbDrop() {
+  const collections = await mongoose.connection.db.collections();
+
+  for (let collection of collections) {
+    // note: collection.remove() has been depreceated.
+    await collection.drop();
+  }
+}
