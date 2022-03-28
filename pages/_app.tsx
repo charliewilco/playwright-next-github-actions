@@ -19,18 +19,13 @@ function MyApp({ Component, pageProps }: AppProps) {
               <a className={router.asPath === "/" ? "active" : ""}>Home</a>
             </Link>
             <Link href="/about">
-              <a
-                data-testid="ABOUT_LINK"
-                className={router.asPath === "/about" ? "active" : ""}
-              >
+              <a className={router.asPath === "/about" ? "active" : ""}>
                 About
               </a>
             </Link>
           </div>
           <Link href="/new">
-            <a data-testid="NEW_LINK" className="new">
-              New
-            </a>
+            <a className="new">New</a>
           </Link>
         </nav>
       </header>

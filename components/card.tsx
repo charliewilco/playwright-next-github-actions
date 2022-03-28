@@ -7,7 +7,7 @@ export const ContactCard: React.VFC<{
   id: string;
 }> = ({ name, city, id }) => {
   return (
-    <div className="card" data-testid="PERSON_CARD">
+    <div className="card">
       <div className="card-content">
         <Avatar>{name[0]}</Avatar>
         <div>

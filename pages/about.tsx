@@ -6,7 +6,7 @@ const AboutPage = () => (
     <Head>
       <title>About | Next.js + TypeScript Example</title>
     </Head>
-    <h1 data-testid="ABOUT_TITLE">About</h1>
+    <h1>About</h1>
     <section>
       <p>This is the about page</p>
       <p>

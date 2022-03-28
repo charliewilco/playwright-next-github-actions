@@ -37,7 +37,5 @@ test("should create a new item", async ({ page }) => {
 
   await page.click("button[type='submit']");
 
-  await expect(page.locator("[data-testid='PERSON_CARD']")).toContainText(
-    "Charlie"
-  );
+  await expect(page.locator(".card")).toContainText("Charlie");
 });

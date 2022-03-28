@@ -34,7 +34,7 @@ const IndexPage: NextPage<
       <h1>Contacts 👋</h1>
     </header>
 
-    <div data-testid="LIST_HOME">
+    <div>
       {people.map(({ name, city, ...p }) => (
         <ContactCard name={name} city={city} id={p._id} key={p._id} />
       ))}
