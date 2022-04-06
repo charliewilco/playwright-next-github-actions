@@ -12,7 +12,7 @@ export const PageLayout: React.FC = ({ children }) => {
         <link rel="icon" href="favicon.ico" />
       </Head>
       <header>
-        <nav>
+        <nav role="banner">
           <div>
             <Link href="/">
               <a className={router.asPath === "/" ? "active" : ""}>Home</a>
@@ -29,40 +29,9 @@ export const PageLayout: React.FC = ({ children }) => {
         </nav>
       </header>
       <main>{children}</main>
-      <footer>
+      <footer className="copyright">
         <span>I&apos;m here to stay (Footer)</span>
       </footer>
-      <style jsx>{`
-        .new {
-          background: var(--surface);
-          padding: 0.5rem 1rem;
-          color: var(--fg);
-          box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-          border-radius: 0.5rem;
-        }
-
-        nav {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 1rem 0;
-        }
-
-        a.active {
-          font-weight: 700;
-        }
-
-        nav > div a {
-          display: inline-block;
-          margin-right: 1rem;
-        }
-
-        footer {
-          padding: 1rem 0.5rem;
-          border-top: 1px solid rgb(136, 140, 145);
-          text-align: center;
-        }
-      `}</style>
     </div>
   );
 };

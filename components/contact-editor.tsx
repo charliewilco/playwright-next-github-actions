@@ -139,7 +139,7 @@ export const Form: React.VFC<IFormProps> = ({
   };
 
   return (
-    <div className="root">
+    <div className="editor-root">
       <form id={formId} onSubmit={handleSubmit}>
         <div className="grid">
           <div>
@@ -184,74 +184,6 @@ export const Form: React.VFC<IFormProps> = ({
         </div>
       </form>
       {message && <p>{message}</p>}
-
-      <style jsx>{`
-        .root {
-          display: block;
-          font-size: 1rem;
-          border-radius: 0.5rem;
-          background: var(--surface);
-          padding: 1rem;
-        }
-
-        .grid {
-          --columns: 12;
-          display: grid;
-          grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
-          gap: 1rem;
-        }
-
-        label {
-          display: block;
-          font-family: var(--monospace);
-          font-size: 0.875rem;
-          margin-bottom: 0.5rem;
-        }
-
-        input {
-          width: 100%;
-          display: block;
-          padding: 0.5rem;
-          border-radius: 0.5rem;
-          font-size: 1.125rem;
-          font-family: var(--sans-serif);
-          background: var(--surface);
-          border: 1px solid var(--bg);
-          color: inherit;
-        }
-
-        input:focus {
-          border-color: var(--highlight);
-        }
-
-        button {
-          background: var(--highlight);
-          padding: 0.5rem 1rem;
-          font-family: var(--sans-serif);
-          color: var(--fg);
-          font-weight: 700;
-          font-size: 1rem;
-          border: 0;
-          border-radius: 0.5rem;
-        }
-
-        span.error {
-          color: red;
-          font-size: 0.875rem;
-          display: block;
-          padding: 0.5rem;
-        }
-
-        .grid > div {
-          grid-column: span 6 / span 6;
-        }
-
-        .tray {
-          padding-top: 1rem;
-          display: flex;
-          justify-content: flex-end;
-        }
-      `}</style>
     </div>
   );
 };
