@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-export const PageLayout: React.FC = ({ children }) => {
+export const PageLayout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   return (
     <div className="outer">

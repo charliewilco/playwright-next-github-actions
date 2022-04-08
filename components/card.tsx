@@ -9,7 +9,9 @@ export const ContactCard: React.VFC<{
   return (
     <div className="card">
       <div className="card-content">
-        <Avatar>{name[0]}</Avatar>
+        <Avatar>
+          <span>{name[0]}</span>
+        </Avatar>
         <div>
           <h5>{name}</h5>
 
