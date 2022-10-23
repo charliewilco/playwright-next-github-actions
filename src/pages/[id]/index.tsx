@@ -1,9 +1,5 @@
 import { useState } from "react";
-import {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-  NextPage,
-} from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -11,10 +7,13 @@ import { dbConnect } from "../../db/connect";
 import { PersonModel, ConvertedPerson } from "../../db/models";
 import { Avatar } from "../../components/named-avatar";
 
-export const getServerSideProps: GetServerSideProps<
-  { person?: ConvertedPerson | null },
-  { id: string }
-> = async ({ params }) => {
+interface DetailPageProps {
+  person?: ConvertedPerson | null;
+}
+
+export const getServerSideProps: GetServerSideProps<DetailPageProps, { id: string }> = async ({
+  params,
+}) => {
   await dbConnect();
 
   if (params?.id) {
@@ -29,9 +28,7 @@ export const getServerSideProps: GetServerSideProps<
   return { props: { person: null } };
 };
 
-const DetailsPage: NextPage<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ person }) => {
+const DetailsPage: NextPage<DetailPageProps> = ({ person }) => {
   const router = useRouter();
   const [message, setMessage] = useState("");
   const handleDelete = async () => {

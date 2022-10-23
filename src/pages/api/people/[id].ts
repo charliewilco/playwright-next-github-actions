@@ -2,10 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { dbConnect } from "../../../db/connect";
 import { PersonModel } from "../../../db/models";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { id },
     method,

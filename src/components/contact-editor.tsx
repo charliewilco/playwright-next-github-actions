@@ -27,11 +27,7 @@ interface IFormState {
   form: PersonForm;
 }
 
-export const Form: React.VFC<IFormProps> = ({
-  formId,
-  initialValues,
-  create = true,
-}) => {
+export const Form: React.VFC<IFormProps> = ({ formId, initialValues, create = true }) => {
   const router = useRouter();
   const contentType = "application/json";
 
@@ -170,12 +166,7 @@ export const Form: React.VFC<IFormProps> = ({
 
           <div>
             <label htmlFor="age">Age</label>
-            <input
-              type="number"
-              name="age"
-              value={form.age}
-              onChange={handleChange}
-            />
+            <input type="number" name="age" value={form.age} onChange={handleChange} />
             {errors["age"] && <span className="error">{errors["age"]}</span>}
           </div>
         </div>

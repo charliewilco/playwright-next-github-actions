@@ -18,9 +18,7 @@ export const PageLayout = ({ children }: { children: React.ReactNode }) => {
               <a className={router.asPath === "/" ? "active" : ""}>Home</a>
             </Link>
             <Link href="/about">
-              <a className={router.asPath === "/about" ? "active" : ""}>
-                About
-              </a>
+              <a className={router.asPath === "/about" ? "active" : ""}>About</a>
             </Link>
           </div>
           <Link href="/new">

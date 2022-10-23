@@ -1,20 +1,17 @@
 import mongoose from "mongoose";
 
-export interface IPerson extends mongoose.Document {
+export interface Person extends mongoose.Document {
   name: string;
   age: number;
   city: string;
 }
 
-const PersonSchema = new mongoose.Schema<IPerson>({
+const PersonSchema = new mongoose.Schema<Person>({
   name: {
-    /* The name of this person */
-
     type: String,
     required: [true, "What's your name?"],
     maxlength: [20, "Name cannot be more than 60 characters"],
   },
-
   age: {
     type: Number,
   },
@@ -24,10 +21,10 @@ const PersonSchema = new mongoose.Schema<IPerson>({
   },
 });
 
-export const PersonModel: mongoose.Model<IPerson> =
-  mongoose.models.Person || mongoose.model<IPerson>("Person", PersonSchema);
+export const PersonModel: mongoose.Model<Person> =
+  mongoose.models.Person || mongoose.model<Person>("Person", PersonSchema);
 
 export type ConvertedPerson = Pick<
-  Pick<mongoose._LeanDocument<IPerson>, "_id" | "id" | "name" | "age" | "city">,
+  Pick<mongoose._LeanDocument<Person>, "_id" | "id" | "name" | "age" | "city">,
   "_id" | "id" | "name" | "age" | "city"
 >;
