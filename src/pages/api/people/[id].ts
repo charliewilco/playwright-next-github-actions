@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { dbConnect } from "../../../db/connect";
-import { PersonModel } from "../../../db/models";
+import { DBAdapter } from "../../../db/adapter";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const {
@@ -9,11 +8,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } = req;
 
   if (id) {
-    await dbConnect();
+    await DBAdapter.instance.connect();
     switch (method) {
       case "GET" /* Get a model by its ID */:
         try {
-          const person = await PersonModel.findById(id);
+          const person = await DBAdapter.instance.models.person.findById(id);
           if (!person) {
             return res.status(400).json({ success: false });
           }
@@ -25,10 +24,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       case "PUT" /* Edit a model by its ID */:
         try {
-          const person = await PersonModel.findByIdAndUpdate(id, req.body, {
-            new: true,
-            runValidators: true,
-          });
+          const person = await DBAdapter.instance.models.person.findByIdAndUpdate(
+            id,
+            req.body,
+            {
+              new: true,
+              runValidators: true,
+            }
+          );
           if (!person) {
             return res.status(400).json({ success: false });
           }
@@ -40,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       case "DELETE" /* Delete a model by its ID */:
         try {
-          const deletedPerson = await PersonModel.deleteOne({ _id: id });
+          const deletedPerson = await DBAdapter.instance.models.person.deleteOne({ _id: id });
           if (!deletedPerson) {
             return res.status(400).json({ success: false });
           }

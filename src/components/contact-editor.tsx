@@ -27,7 +27,7 @@ interface IFormState {
   form: PersonForm;
 }
 
-export const Form: React.VFC<IFormProps> = ({ formId, initialValues, create = true }) => {
+export const Form = ({ formId, initialValues, create = true }: IFormProps) => {
   const router = useRouter();
   const contentType = "application/json";
 

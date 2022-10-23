@@ -3,26 +3,25 @@ import type { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { dbConnect } from "../../db/connect";
-import { PersonModel, ConvertedPerson } from "../../db/models";
+import { DBAdapter, type PersonType } from "../../db/adapter";
 import { Avatar } from "../../components/named-avatar";
 
 interface DetailPageProps {
-  person?: ConvertedPerson | null;
+  person?: PersonType | null;
 }
 
 export const getServerSideProps: GetServerSideProps<DetailPageProps, { id: string }> = async ({
   params,
 }) => {
-  await dbConnect();
+  await DBAdapter.instance.connect();
 
   if (params?.id) {
-    const person = await PersonModel.findById(params.id).lean();
-    if (person !== null) {
-      person._id = person._id.toString();
+    const result = await DBAdapter.instance.models.person.findById(params.id);
+    if (result !== null) {
+      return { props: { person: DBAdapter.toPerson(result) } };
     }
 
-    return { props: { person } };
+    return { props: { person: null } };
   }
 
   return { props: { person: null } };

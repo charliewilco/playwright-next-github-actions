@@ -1,5 +1,5 @@
 {
-  "name": "with-typescript",
+  "name": "playwright-next-mongodb-example",
   "version": "1.0.0",
   "scripts": {
     "dev": "next dev",

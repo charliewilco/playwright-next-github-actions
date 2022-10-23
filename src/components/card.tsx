@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { Avatar } from "./named-avatar";
 
-export const ContactCard: React.VFC<{
+interface ContactCardProps {
   name: string;
   city: string;
   id: string;
-}> = ({ name, city, id }) => {
+}
+
+export const ContactCard = ({ name, city, id }: ContactCardProps) => {
   return (
     <div className="card">
       <div className="card-content">

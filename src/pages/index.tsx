@@ -1,30 +1,32 @@
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import { PersonModel, type ConvertedPerson, type Person } from "../db/models";
-import { dbConnect } from "../db/connect";
+import { DBAdapter, type PersonType, type PersonDocument } from "../db/adapter";
 import { ContactCard } from "../components/card";
 
 interface IndexPageProps {
-  people: ConvertedPerson[];
+  people: PersonType[];
 }
 
 export const getServerSideProps: GetServerSideProps<IndexPageProps> = async () => {
-  await dbConnect();
+  await DBAdapter.instance.connect();
 
-  const result: Person[] = await PersonModel.find({});
-  const people = result.map<ConvertedPerson>((doc) => {
-    return {
-      name: doc.name,
-      city: doc.city,
-      age: doc.age,
-      _id: doc._id.toString(),
-    };
-  });
+  const result: PersonDocument[] = await DBAdapter.instance.models.person.find({});
+  const people = result.map<PersonType>(DBAdapter.toPerson);
 
   return { props: { people: people ?? [] } };
 };
 
 const IndexPage: NextPage<IndexPageProps> = ({ people }) => {
+  let content;
+
+  if (people.length === 0) {
+    content = <p className="empty">No people found</p>;
+  } else {
+    content = people.map(({ name, city, ...p }) => (
+      <ContactCard name={name} city={city} id={p._id} key={p._id} />
+    ));
+  }
+
   return (
     <div>
       <Head>
@@ -34,11 +36,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ people }) => {
         <h1>Contacts 👋</h1>
       </header>
 
-      <div>
-        {people.map(({ name, city, ...p }) => (
-          <ContactCard name={name} city={city} id={p._id} key={p._id} />
-        ))}
-      </div>
+      <div>{content}</div>
     </div>
   );
 };
