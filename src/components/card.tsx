@@ -15,7 +15,7 @@ export const ContactCard: React.VFC<{
         <div>
           <h5>{name}</h5>
 
-          <p>{city}</p>
+          <p className="city">{city}</p>
         </div>
       </div>
       <div className="card-actions">

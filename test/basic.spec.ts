@@ -33,9 +33,12 @@ test("should create a new item", async ({ page }) => {
     }
   });
   await page.type("input[name='age']", "37");
+  await page.fill("input[name='city']", "");
   await page.type("input[name='city']", "Tacoma, WA");
 
   await page.click("button[type='submit']");
 
   await expect(page.locator(".card")).toContainText("Charlie");
+  await expect(page.locator(".city")).toContainText("Tacoma, WA");
+  await expect(page.locator(".city")).not.toContainText("Seattle");
 });
