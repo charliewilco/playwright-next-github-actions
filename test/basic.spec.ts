@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { dbConnect, dbDisconnect, dbDrop } from "../db/connect";
+import { dbConnect, dbDisconnect, dbDrop } from "../src/db/connect";
 
 test.beforeAll(async () => {
   await dbConnect();

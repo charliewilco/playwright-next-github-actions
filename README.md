@@ -19,7 +19,7 @@ brew install mongodb-community
 Install the project dependencies:
 
 ```
-pnpm install
+npm install
 ```
 
 Install playwright:
@@ -31,7 +31,7 @@ npx playwright install --with-deps
 Build the project first:
 
 ```
-pnpm build
+npm run build
 ```
 
 ## Notes

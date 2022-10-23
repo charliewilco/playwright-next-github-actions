@@ -7,7 +7,7 @@
     "start": "next start",
     "lint": "next lint",
     "types": "tsc --noEmit --pretty",
-    "test:e2e": "playwright test"
+    "test": "playwright test"
   },
   "dependencies": {
     "immer": "^9.0.12",
