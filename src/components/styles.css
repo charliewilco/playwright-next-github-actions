@@ -1,233 +1,275 @@
 :root {
-  --monospace: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
-    Liberation Mono, monospace;
-  --sans-serif: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Helvetica, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-    "Segoe UI Symbol";
-  --bg: rgb(243, 244, 246);
-  --fg: #3c4043;
-  --highlight: #3b82f6;
-  --surface: #fff;
+	--monospace: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono,
+		monospace;
+	--sans-serif: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, sans-serif,
+		"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	--bg: rgb(243, 244, 246);
+	--fg: #3c4043;
+	--highlight: #3b82f6;
+	--surface: #fff;
 }
 
 * {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: inherit;
+	box-sizing: inherit;
 }
 
 html {
-  box-sizing: border-box;
-  text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  -webkit-tap-highlight-color: transparent;
-  background: var(--bg);
-  color: var(--fg);
-  font: 400 100% / 1.3 var(--sans-serif);
+	box-sizing: border-box;
+	text-size-adjust: 100%;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	-webkit-tap-highlight-color: transparent;
+	background: var(--bg);
+	color: var(--fg);
+	font: 400 100% / 1.3 var(--sans-serif);
 }
 
 a {
-  text-decoration: none;
-  color: var(--highlight);
+	text-decoration: none;
+	color: var(--highlight);
 }
 
 h1 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  font-weight: 700;
+	font-size: 1.5rem;
+	margin-bottom: 1rem;
+	font-weight: 700;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --fg: #fafafa;
-    --bg: #0a0a0a;
-    --surface: #181818;
-    --highlight: #3b82f6;
-  }
+	:root {
+		--fg: #fafafa;
+		--bg: #0a0a0a;
+		--surface: #181818;
+		--highlight: #3b82f6;
+	}
 }
 
 .outer {
-  max-width: 48rem;
-  margin: 0 auto 1rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+	max-width: 48rem;
+	margin: 0 auto 1rem;
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
 }
 
 .card {
-  background: var(--surface);
-  padding: 1rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+	background: var(--surface);
+	padding: 1rem;
+	margin-bottom: 2rem;
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .card-content {
-  display: flex;
-  margin-bottom: 1rem;
+	display: flex;
+	margin-bottom: 1rem;
 }
 
 .card-content > div {
-  margin-left: 1rem;
+	margin-left: 1rem;
 }
 
 .card-actions {
-  border-top: 1px solid rgb(136, 140, 145);
-  padding: 0.5rem 0;
-  display: flex;
-  justify-content: flex-end;
+	border-top: 1px solid rgb(136, 140, 145);
+	padding: 0.5rem 0;
+	display: flex;
+	justify-content: flex-end;
 }
 
 .card h5 {
-  font-size: 1.25rem;
+	font-size: 1.25rem;
 }
 
 .card p {
-  opacity: 0.5;
+	opacity: 0.5;
 }
 
 .card button {
-  font-family: var(--sans-serif);
-  appearance: none;
-  font-weight: 700;
-  background: none;
-  border: 0;
-  border-radius: 0;
-  color: var(--highlight);
-  margin-left: 1rem;
+	font-family: var(--sans-serif);
+	appearance: none;
+	font-weight: 700;
+	background: none;
+	border: 0;
+	border-radius: 0;
+	color: var(--highlight);
+	margin-left: 1rem;
 }
 
 .editor-root {
-  display: block;
-  font-size: 1rem;
-  border-radius: 0.5rem;
-  background: var(--surface);
-  padding: 1rem;
+	display: block;
+	font-size: 1rem;
+	border-radius: 0.5rem;
+	background: var(--surface);
+	padding: 1rem;
 }
 
 .editor-root .grid {
-  --columns: 12;
-  display: grid;
-  grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
-  gap: 1rem;
+	--columns: 12;
+	display: grid;
+	grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+	gap: 1rem;
 }
 
 .editor-root label {
-  display: block;
-  font-family: var(--monospace);
-  font-size: 0.875rem;
-  margin-bottom: 0.5rem;
+	display: block;
+	font-family: var(--monospace);
+	font-size: 0.875rem;
+	margin-bottom: 0.5rem;
 }
 
 .editor-root input {
-  width: 100%;
-  display: block;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  font-size: 1.125rem;
-  font-family: var(--sans-serif);
-  background: var(--surface);
-  border: 1px solid var(--bg);
-  color: inherit;
+	width: 100%;
+	display: block;
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+	font-size: 1.125rem;
+	font-family: var(--sans-serif);
+	background: var(--surface);
+	border: 1px solid var(--bg);
+	color: inherit;
 }
 
 .editor-root input:focus {
-  border-color: var(--highlight);
+	border-color: var(--highlight);
 }
 
 .editor-root button {
-  background: var(--highlight);
-  padding: 0.5rem 1rem;
-  font-family: var(--sans-serif);
-  color: var(--fg);
-  font-weight: 700;
-  font-size: 1rem;
-  border: 0;
-  border-radius: 0.5rem;
+	background: var(--highlight);
+	padding: 0.5rem 1rem;
+	font-family: var(--sans-serif);
+	color: var(--fg);
+	font-weight: 700;
+	font-size: 1rem;
+	border: 0;
+	border-radius: 0.5rem;
 }
 
 .editor-root span.error {
-  color: red;
-  font-size: 0.875rem;
-  display: block;
-  padding: 0.5rem;
+	color: red;
+	font-size: 0.875rem;
+	display: block;
+	padding: 0.5rem;
 }
 
 .editor-root .grid > div {
-  grid-column: span 6 / span 6;
+	grid-column: span 6 / span 6;
 }
 
 .editor-root .tray {
-  padding-top: 1rem;
-  display: flex;
-  justify-content: flex-end;
+	padding-top: 1rem;
+	display: flex;
+	justify-content: flex-end;
 }
 
 .new {
-  background: var(--surface);
-  padding: 0.5rem 1rem;
-  color: var(--fg);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  border-radius: 0.5rem;
+	background: var(--surface);
+	padding: 0.5rem 1rem;
+	color: var(--fg);
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+	border-radius: 0.5rem;
 }
 
 nav[role="banner"] {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem 0;
 }
 
 nav[role="banner"] a.active {
-  font-weight: 700;
+	font-weight: 700;
 }
 
 nav[role="banner"] > div a {
-  display: inline-block;
-  margin-right: 1rem;
+	display: inline-block;
+	margin-right: 1rem;
 }
 
 .copyright {
-  padding: 1rem 0.5rem;
-  border-top: 1px solid rgb(136, 140, 145);
-  text-align: center;
+	padding: 1rem 0.5rem;
+	border-top: 1px solid rgb(136, 140, 145);
+	text-align: center;
 }
 
 .avatar {
-  --size: 2rem;
-  width: var(--size);
-  height: var(--size);
-  font-weight: 700;
-  color: white;
-  line-height: 1;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: 50%;
-  background-image: linear-gradient(
-    to left top,
-    rgb(244, 114, 182),
-    rgb(59, 130, 246),
-    rgb(109, 40, 217)
-  );
+	--size: 2rem;
+	width: var(--size);
+	height: var(--size);
+	font-weight: 700;
+	color: white;
+	line-height: 1;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	overflow: hidden;
+	border-radius: 50%;
+	background-image: linear-gradient(
+		to left top,
+		rgb(244, 114, 182),
+		rgb(59, 130, 246),
+		rgb(109, 40, 217)
+	);
 }
 
 .avatar-initials {
-  font-size: 1rem;
+	font-size: 1rem;
 }
 
 @media (min-width: 48rem) {
-  .avatar {
-    --size: 4rem;
-  }
+	.avatar {
+		--size: 4rem;
+	}
 
-  .avatar-initials {
-    font-size: 1.5rem;
-  }
+	.avatar-initials {
+		font-size: 1.5rem;
+	}
+}
+
+.DetailsHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 2rem;
+}
+
+.DetailsHeader > div {
+	display: flex;
+	align-items: center;
+}
+
+.DetailsHeader h1 {
+	margin: 0 0 0 1rem;
+}
+
+.DetailGrid p {
+	font-size: 1.5rem;
+}
+
+.label {
+	display: block;
+	font-family: var(--monospace);
+}
+
+.DetailGrid {
+	display: grid;
+	gap: 2rem;
+	grid-template-columns: 1fr 1fr;
+}
+
+.DetailsHeader button {
+	font-family: var(--sans-serif);
+	appearance: none;
+	font-weight: 700;
+	background: none;
+	border: 0;
+	border-radius: 0;
+	color: var(--highlight);
+	margin-left: 1rem;
+	padding: 0;
 }
