@@ -7,9 +7,9 @@ interface DeletePromptProps {
 }
 
 export function DeletePrompt(props: DeletePromptProps) {
-	const [message, setMessage] = useState("");
-	const router = useRouter();
-	const handleDelete = useCallback(async () => {
+	let [message, setMessage] = useState("");
+	let router = useRouter();
+	let handleDelete = useCallback(async () => {
 		try {
 			await fetch(`/api/people/${props.id}`, {
 				method: "DELETE",

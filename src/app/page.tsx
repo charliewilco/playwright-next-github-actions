@@ -1,26 +1,19 @@
-import { DBAdapter, type PersonType, type PersonDocument } from "../db/adapter";
+import { useMemo } from "react";
 import { ContactCard } from "../components/card";
+import { getPeople } from "../lib/people";
 
-async function getPeople(): Promise<PersonType[]> {
-	await DBAdapter.instance.connect();
+export default async function IndexPage() {
+	let people = await getPeople();
 
-	const result: PersonDocument[] = await DBAdapter.instance.models.person.find({});
-	const people = result.map<PersonType>(DBAdapter.toPerson);
-
-	return people ?? [];
-}
-
-async function IndexPage() {
-	const people = await getPeople();
-	let content;
-
-	if (people.length === 0) {
-		content = <p className="empty">No people found</p>;
-	} else {
-		content = people.map(({ name, city, ...p }) => (
-			<ContactCard name={name} city={city} id={p._id} key={p._id} />
-		));
-	}
+	let content = useMemo(() => {
+		if (people.length === 0) {
+			return <p className="empty">No people found</p>;
+		} else {
+			return people.map(({ name, city, ...p }) => (
+				<ContactCard name={name} city={city} id={p._id} key={p._id} />
+			));
+		}
+	}, [people]);
 
 	return (
 		<div>
@@ -32,5 +25,3 @@ async function IndexPage() {
 		</div>
 	);
 }
-
-export default IndexPage;

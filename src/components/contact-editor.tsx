@@ -1,142 +1,258 @@
 "use client";
-import { useState } from "react";
+import { useCallback, useState, useId } from "react";
 import { useRouter } from "next/navigation";
 import { mutate } from "swr";
 import produce from "immer";
 
-type PersonForm = {
+type ContactFormValues = {
 	name: string;
 	city: string;
 	age: number;
 };
 
-export const defaultValues: PersonForm = {
+export let defaultValues: ContactFormValues = {
 	name: "",
 	city: "Seattle",
 	age: 24,
 };
 
-interface IFormProps {
-	id?: string;
-	create?: boolean;
-	initialValues: PersonForm;
-	formId: string;
+interface ContactFormProps {
+	id: string;
+	initialValues: ContactFormValues;
 }
 
-interface IFormState {
+interface ContactFormState {
 	message: string | null;
-	errors: Partial<Record<keyof PersonForm, string>>;
-	form: PersonForm;
+	errors: Partial<Record<keyof ContactFormValues, string>>;
+	form: ContactFormValues;
 }
 
-export function ContactForm({ formId, id, initialValues, create = true }: IFormProps) {
-	const router = useRouter();
-	const contentType = "application/json";
+function formValidate(values: ContactFormValues) {
+	let errors: Partial<Record<keyof ContactFormValues, string>> = {};
 
-	const [{ form, message, errors }, setState] = useState<IFormState>({
+	if (!values.name) {
+		errors.name = "Name is required";
+	}
+
+	if (!values.city) {
+		errors.city = "City is required";
+	}
+
+	if (!values.age) {
+		errors.age = "Age is required";
+	}
+
+	return errors;
+}
+
+export function CreateContactForm() {
+	let id = useId();
+
+	let [{ form, message, errors }, setState] = useState<ContactFormState>({
 		message: null,
 		errors: {},
 		form: {
-			...initialValues,
+			...defaultValues,
 		},
 	});
 
-	const putData = async (form: PersonForm) => {
-		try {
-			const res = await fetch(`/api/people/${id}`, {
-				method: "PUT",
-				headers: {
-					Accept: contentType,
-					"Content-Type": contentType,
-				},
-				body: JSON.stringify(form),
-			});
+	let router = useRouter();
 
-			if (!res.ok) {
-				throw new Error(res.status.toString());
-			}
-
-			const { data } = await res.json();
-
-			mutate(`/api/people/${id}`, data, false);
-			router.push("/");
-		} catch (error) {
-			setState(
-				produce((draft) => {
-					draft.message = "Failed to add person";
-				})
-			);
-		}
-	};
-
-	const postData = async (form: PersonForm) => {
-		try {
-			const res = await fetch("/api/people", {
-				method: "POST",
-				headers: {
-					Accept: contentType,
-					"Content-Type": contentType,
-				},
-				body: JSON.stringify(form),
-			});
-
-			if (!res.ok) {
-				throw new Error(res.status.toString());
-			}
-
-			router.push("/");
-		} catch (error) {
-			setState(
-				produce((draft) => {
-					draft.message = "Failed to add person";
-				})
-			);
-		}
-	};
-
-	const handleChange = (e: React.ChangeEvent<any>) => {
-		const target = e.target;
-		const value = target.value;
-		const name = target.name as keyof PersonForm;
-		setState(
-			produce((draft) => {
-				draft.message = null;
-				return {
-					...draft,
-					form: {
-						...draft.form,
-						[name]: value,
+	let postData = useCallback(
+		async (form: ContactFormValues) => {
+			try {
+				let res = await fetch("/api/people", {
+					method: "POST",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
 					},
-				};
-			})
-		);
-	};
+					body: JSON.stringify(form),
+				});
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		const errs = formValidate();
-		if (Object.keys(errs).length === 0) {
-			create ? postData(form) : putData(form);
-		} else {
+				if (!res.ok) {
+					throw new Error(res.status.toString());
+				}
+
+				router.push("/");
+			} catch (error) {
+				setState(
+					produce((draft) => {
+						draft.message = "Failed to add person";
+					})
+				);
+			}
+		},
+		[setState, router]
+	);
+
+	let handleChange = useCallback(
+		(e: React.ChangeEvent<any>) => {
+			let target = e.target;
+			let value = target.value;
+			let name = target.name as keyof ContactFormValues;
 			setState(
 				produce((draft) => {
-					draft.errors = errs;
+					draft.message = null;
+					return {
+						...draft,
+						form: {
+							...draft.form,
+							[name]: value,
+						},
+					};
 				})
 			);
-		}
-	};
+		},
+		[setState]
+	);
 
-	const formValidate = (): Partial<Record<keyof PersonForm, string>> => {
-		let err: any = {};
-		if (!form.name) err.name = "Name is required";
-		if (!form.age) err.age = "Age is required";
-		if (!form.city) err.city = "City is required";
-		return err;
-	};
+	let handleSubmit = useCallback(
+		(e: React.FormEvent<HTMLFormElement>) => {
+			e.preventDefault();
+			let errs = formValidate(form);
+			if (Object.keys(errs).length === 0) {
+				postData(form);
+			} else {
+				setState(
+					produce((draft) => {
+						draft.errors = errs;
+					})
+				);
+			}
+		},
+		[postData, form]
+	);
 
 	return (
 		<div className="editor-root">
-			<form id={formId} onSubmit={handleSubmit}>
+			<form id={id} onSubmit={handleSubmit}>
+				<div className="grid">
+					<div>
+						<label htmlFor="name">Name</label>
+						<input
+							type="text"
+							maxLength={20}
+							name="name"
+							value={form.name}
+							onChange={handleChange}
+							required
+						/>
+						{errors["name"] && <span className="error">{errors["name"]}</span>}
+					</div>
+					<div>
+						<label htmlFor="city">City</label>
+						<input
+							type="text"
+							maxLength={20}
+							name="city"
+							value={form.city}
+							onChange={handleChange}
+							required
+						/>
+
+						{errors["city"] && <span className="error">{errors["city"]}</span>}
+					</div>
+
+					<div>
+						<label htmlFor="age">Age</label>
+						<input type="number" name="age" value={form.age} onChange={handleChange} />
+						{errors["age"] && <span className="error">{errors["age"]}</span>}
+					</div>
+				</div>
+				<div className="tray">
+					<button type="submit">Submit</button>
+				</div>
+			</form>
+			{message && <p>{message}</p>}
+		</div>
+	);
+}
+
+export function EditConactForm(props: ContactFormProps) {
+	let id = useId();
+	let router = useRouter();
+
+	let [{ form, message, errors }, setState] = useState<ContactFormState>({
+		message: null,
+		errors: {},
+		form: {
+			...props.initialValues,
+		},
+	});
+
+	let putData = useCallback(
+		async (form: ContactFormValues) => {
+			try {
+				let res = await fetch(`/api/people/${props.id}`, {
+					method: "PUT",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(form),
+				});
+
+				if (!res.ok) {
+					throw new Error(res.status.toString());
+				}
+
+				let { data } = await res.json();
+
+				mutate(`/api/people/${props.id}`, data, false);
+				router.push("/");
+			} catch (error) {
+				setState(
+					produce((draft) => {
+						draft.message = "Failed to add person";
+					})
+				);
+			}
+		},
+		[props.id, router, setState]
+	);
+
+	let handleChange = useCallback(
+		(e: React.ChangeEvent<any>) => {
+			let target = e.target;
+			let value = target.value;
+			let name = target.name as keyof ContactFormValues;
+			setState(
+				produce((draft) => {
+					draft.message = null;
+					return {
+						...draft,
+						form: {
+							...draft.form,
+							[name]: value,
+						},
+					};
+				})
+			);
+		},
+		[setState]
+	);
+
+	let handleSubmit = useCallback(
+		(e: React.FormEvent<HTMLFormElement>) => {
+			e.preventDefault();
+			let errs = formValidate(form);
+			if (Object.keys(errs).length === 0) {
+				putData(form);
+			} else {
+				setState(
+					produce((draft) => {
+						draft.errors = errs;
+					})
+				);
+			}
+		},
+		[form, putData]
+	);
+
+	return (
+		<div className="editor-root">
+			<form id={id} onSubmit={handleSubmit}>
 				<div className="grid">
 					<div>
 						<label htmlFor="name">Name</label>

@@ -1,21 +1,19 @@
-import { use } from "react";
 import Link from "next/link";
-import { DBAdapter, type PersonType } from "../../db/adapter";
 import { Avatar } from "../../components/named-avatar";
 import { DeletePrompt } from "../../components/delete-prompt";
+import { getPeople, getPerson } from "../../lib/people";
 
-async function getPerson(id: string): Promise<PersonType | null> {
-	await DBAdapter.instance.connect();
-	const result = await DBAdapter.instance.models.person.findById(id);
-	if (result !== null) {
-		return DBAdapter.toPerson(result);
-	} else {
-		return null;
-	}
+export async function generateStaticParams() {
+	let contacts = await getPeople();
+	return contacts.map((person) => ({
+		id: person._id,
+	}));
 }
 
-function DetailsPage({ params: { id } }: { params: { id: string } }) {
-	const person = use(getPerson(id));
+export let revalidate = 60;
+
+export default async function DetailsPage({ params: { id } }: { params: { id: string } }) {
+	let person = await getPerson(id);
 
 	if (!person) {
 		return <h1>Not found</h1>;
@@ -25,7 +23,7 @@ function DetailsPage({ params: { id } }: { params: { id: string } }) {
 		<div>
 			<header className="DetailsHeader">
 				<div>
-					<Avatar>{person.name[0]}</Avatar>
+					<Avatar name={person.name[0]} />
 					<h1>{person.name}</h1>
 				</div>
 				<div>
@@ -55,5 +53,3 @@ function DetailsPage({ params: { id } }: { params: { id: string } }) {
 		</div>
 	);
 }
-
-export default DetailsPage;

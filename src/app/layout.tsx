@@ -2,7 +2,7 @@ import Link from "next/link";
 import "../components/styles.css";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-	const pathname: string = "/";
+	let pathname: string = "/";
 
 	return (
 		<html>

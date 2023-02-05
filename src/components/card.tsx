@@ -7,24 +7,22 @@ interface ContactCardProps {
 	id: string;
 }
 
-export function ContactCard({ name, city, id }: ContactCardProps) {
+export function ContactCard(props: ContactCardProps) {
 	return (
 		<div className="card">
 			<div className="card-content">
-				<Avatar>
-					<span>{name[0]}</span>
-				</Avatar>
+				<Avatar name={props.name[0]} />
 				<div>
-					<h5>{name}</h5>
+					<h5>{props.name}</h5>
 
-					<p className="city">{city}</p>
+					<p className="city">{props.city}</p>
 				</div>
 			</div>
 			<div className="card-actions">
-				<Link href="/[id]/edit" as={`/${id}/edit`} passHref>
+				<Link href="/[id]/edit" as={`/${props.id}/edit`} passHref>
 					<button>Edit</button>
 				</Link>
-				<Link href="/[id]" as={`/${id}`} passHref>
+				<Link href="/[id]" as={`/${props.id}`} passHref>
 					<button>Details</button>
 				</Link>
 			</div>

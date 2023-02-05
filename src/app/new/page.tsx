@@ -1,4 +1,4 @@
-import { ContactForm, defaultValues } from "../../components/contact-editor";
+import { CreateContactForm } from "../../components/contact-editor";
 
 export default function NewPage() {
 	return (
@@ -8,7 +8,7 @@ export default function NewPage() {
 			</header>
 
 			<div>
-				<ContactForm formId="add-person-form" initialValues={defaultValues} />
+				<CreateContactForm />
 			</div>
 		</div>
 	);
