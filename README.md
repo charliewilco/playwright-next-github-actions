@@ -19,19 +19,19 @@ brew install mongodb-community
 Install the project dependencies:
 
 ```
-npm install
+yarn
 ```
 
 Install playwright:
 
 ```
-npx playwright install --with-deps
+yarn playwright install --with-deps
 ```
 
 Build the project first:
 
 ```
-npm run build
+yarn build
 ```
 
 ## Notes

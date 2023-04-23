@@ -1,25 +1,21 @@
-"use client";
 import Head from "next/head";
-import useSWR from "swr";
-import { EditConactForm } from "../../../components/contact-editor";
-import { fetcher } from "../../../lib/fetcher";
+import { notFound } from "next/navigation";
+import { EditConactForm as EditContactForm } from "../../../components/contact-editor";
+import { getPerson } from "../../../lib/people";
 
-export default function EditPerson({ params }: { params: { id: string } }) {
-	let { data, error } = useSWR(params.id ? `/api/people/${params.id}` : null, fetcher);
+export default async function EditPerson({ params }: { params: { id: string } }) {
+	let data = await getPerson(params.id);
 
-	if (error) return <p>Failed to load</p>;
-	if (!data) return <p>Loading...</p>;
-
-	let initialValues = {
-		...data,
-	};
+	if (data === null) {
+		return notFound();
+	}
 
 	return (
 		<div>
 			<Head>
-				<title>Edit {initialValues.name}</title>
+				<title>Edit {data.name}</title>
 			</Head>
-			<EditConactForm initialValues={initialValues} id={params.id} />
+			<EditContactForm initialValues={{ ...data }} id={params.id} />
 		</div>
 	);
 }

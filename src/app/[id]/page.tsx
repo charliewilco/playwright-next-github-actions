@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Avatar } from "../../components/named-avatar";
 import { DeletePrompt } from "../../components/delete-prompt";
@@ -11,6 +12,10 @@ export async function generateStaticParams() {
 }
 
 export let revalidate = 60;
+
+export const metadata: Metadata = {
+	title: "Edit Person"
+}
 
 export default async function DetailsPage({ params: { id } }: { params: { id: string } }) {
 	let person = await getPerson(id);

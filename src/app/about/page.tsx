@@ -1,4 +1,9 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+	title: "About | Next.js + TypeScript Example",
+};
 
 export default function AboutPage() {
 	return (

@@ -1,4 +1,9 @@
+import { Metadata } from "next";
 import { CreateContactForm } from "../../components/contact-editor";
+
+export const metadata: Metadata = {
+	title: "New Person",
+};
 
 export default function NewPage() {
 	return (

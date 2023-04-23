@@ -7,5 +7,6 @@ module.exports = {
 	swcMinify: true,
 	experimental: {
 		appDir: true,
+		serverComponentsExternalPackages: ["mongoose"],
 	},
 };

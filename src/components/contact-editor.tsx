@@ -2,7 +2,7 @@
 import { useCallback, useState, useId } from "react";
 import { useRouter } from "next/navigation";
 import { mutate } from "swr";
-import produce from "immer";
+import { produce } from "immer";
 
 type ContactFormValues = {
 	name: string;
@@ -156,7 +156,12 @@ export function CreateContactForm() {
 
 					<div>
 						<label htmlFor="age">Age</label>
-						<input type="number" name="age" value={form.age} onChange={handleChange} />
+						<input
+							type="number"
+							name="age"
+							value={form.age}
+							onChange={handleChange}
+						/>
 						{errors["age"] && <span className="error">{errors["age"]}</span>}
 					</div>
 				</div>
@@ -282,7 +287,12 @@ export function EditConactForm(props: ContactFormProps) {
 
 					<div>
 						<label htmlFor="age">Age</label>
-						<input type="number" name="age" value={form.age} onChange={handleChange} />
+						<input
+							type="number"
+							name="age"
+							value={form.age}
+							onChange={handleChange}
+						/>
 						{errors["age"] && <span className="error">{errors["age"]}</span>}
 					</div>
 				</div>

@@ -21,10 +21,12 @@ let PersonSchema = new mongoose.Schema<PersonDocument>({
 	},
 });
 
-export type PersonType = Pick<
-	Pick<mongoose._LeanDocument<PersonDocument>, "_id" | "id" | "name" | "age" | "city">,
-	"_id" | "id" | "name" | "age" | "city"
->;
+export type PersonType = {
+	_id: string;
+	name: string;
+	age: number;
+	city: string;
+}
 
 interface ConntectionStatus {
 	isConnected?: number;
