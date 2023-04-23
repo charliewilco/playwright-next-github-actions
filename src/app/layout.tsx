@@ -1,28 +1,14 @@
-import Link from "next/link";
 import "../components/styles.css";
+import { Nav } from "../components/nav";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-	let pathname: string = "/";
-
 	return (
-		<html>
+		<html lang="en">
 			<head />
 			<body>
 				<div className="outer">
 					<header>
-						<nav role="banner">
-							<div>
-								<Link href="/" className={pathname === "/" ? "active" : ""}>
-									Home
-								</Link>
-								<Link href="/about" className={pathname === "/about" ? "active" : ""}>
-									About
-								</Link>
-							</div>
-							<Link href="/new" className="new">
-								New
-							</Link>
-						</nav>
+						<Nav />
 					</header>
 					<main>{children}</main>
 					<footer className="copyright">
@@ -31,5 +17,4 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 				</div>
 			</body>
 		</html>
-	);
-}
+	); }
