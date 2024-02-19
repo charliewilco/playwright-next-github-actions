@@ -33,6 +33,6 @@ jobs:
       - name: Install Playwright
         run: pnpm deps
       - name: Build Project for Testing
-        run: yarn build
+        run: pnpm build
       - name: Run Playwright
         run: pnpm test

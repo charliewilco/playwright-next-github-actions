@@ -46,7 +46,7 @@ export default async function DetailsPage({
 			<div className="card">
 				<div className="DetailGrid">
 					<div>
-						<p>{person.age}</p>
+						<p id="age">{person.age}</p>
 						<span className="label">Age</span>
 					</div>
 					<div>

@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidateTag, revalidatePath, unstable_cache } from "next/cache";
 import { DBAdapter, type PersonDocument, type PersonType } from "../db/adapter";
 
 type ContactFormValues = {
@@ -54,14 +55,14 @@ export async function createContact(
 	}
 	await DBAdapter.instance.connect();
 	let person = await DBAdapter.instance.models.person.create(data);
-
+	revalidateTag("people");
 	return {
 		ok: true,
 		data: {
 			name: person?.name,
 			city: person?.city,
 			age: person?.age,
-			id: person?._id,
+			id: person?.id,
 		},
 	};
 }
@@ -91,6 +92,9 @@ export async function updateContact(
 			runValidators: true,
 		});
 
+	revalidatePath(`/${id}`);
+	revalidateTag("people");
+
 	return {
 		ok: true,
 		data: {
@@ -110,6 +114,7 @@ export async function deleteContact(
 		let removed = await DBAdapter.instance.models.person.deleteOne({ _id: id });
 
 		console.log(removed);
+		revalidateTag("people");
 		return {
 			ok: true,
 			data: { message: "Contact deleted" },
@@ -130,9 +135,13 @@ export async function getPeople(): Promise<PersonType[]> {
 	return people ?? [];
 }
 
+export const cachedPeople = unstable_cache(getPeople, [], {
+	tags: ["people"],
+});
+
 export async function getPerson(id: string): Promise<PersonType | null> {
-	await DBAdapter.instance.connect();
 	try {
+		await DBAdapter.instance.connect();
 		let result = await DBAdapter.instance.models.person.findById(id);
 		if (result !== null) {
 			return DBAdapter.toPerson(result);

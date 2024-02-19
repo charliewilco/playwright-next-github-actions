@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { ContactCard } from "../components/card";
-import { getPeople } from "./actions";
+import { cachedPeople } from "./actions";
 
 export const metadata: Metadata = {
 	title: "MongoDB Next.js Demo",
 };
 
 export default async function IndexPage() {
-	let people = await getPeople();
+	let people = await cachedPeople();
 
 	let content: JSX.Element | JSX.Element[];
 

@@ -26,7 +26,7 @@ export type PersonType = {
 	name: string;
 	age: number;
 	city: string;
-}
+};
 
 interface ConntectionStatus {
 	isConnected?: number;
@@ -49,11 +49,14 @@ export class DBAdapter {
 	connection: ConntectionStatus = {};
 
 	models: Models = {
-		person: mongoose.models.Person || mongoose.model<PersonDocument>("Person", PersonSchema),
+		person:
+			mongoose.models.Person ||
+			mongoose.model<PersonDocument>("Person", PersonSchema),
 	};
 
 	constructor(
-		private connectionURL = process.env.DB_ADDRESS || "mongodb://127.0.0.1:27017/next-js-demo"
+		private connectionURL = process.env.DB_ADDRESS ||
+			"mongodb://127.0.0.1:27017/next-js-demo"
 	) {}
 
 	async connect() {
