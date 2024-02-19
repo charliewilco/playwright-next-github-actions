@@ -1,6 +1,6 @@
 
 # Update the VARIANT arg in docker-compose.yml to pick a Node version: 10, 12, 14
-ARG VARIANT=12
+ARG VARIANT=20
 FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:dev-${VARIANT}
 
 # Install MongoDB command line tools

@@ -8,6 +8,6 @@
   },
   "extensions": ["mongodb.mongodb-vscode"],
   "forwardPorts": [3000, 27017],
-  "postCreateCommand": "npm install",
+  "postCreateCommand": "pnpm install",
   "remoteUser": "node"
 }

@@ -1,180 +1,121 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { mutate } from "swr";
-import produce from "immer";
+"use client";
+import { useId } from "react";
+import { useFormState, useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
+import { createContact, updateContact } from "../app/actions";
 
-type PersonForm = {
-  name: string;
-  city: string;
-  age: number;
+type ContactFormValues = {
+	name: string;
+	city: string;
+	age: number;
 };
 
-export const defaultValues: PersonForm = {
-  name: "",
-  city: "Seattle",
-  age: 24,
+export let defaultValues: ContactFormValues = {
+	name: "",
+	city: "Seattle",
+	age: 24,
 };
 
-interface IFormProps {
-  create?: boolean;
-  initialValues: PersonForm;
-  formId: string;
+interface ContactFormProps {
+	id: string;
+	age: number;
+	name: string;
+	city: string;
 }
 
-interface IFormState {
-  message: string | null;
-  errors: Partial<Record<keyof PersonForm, string>>;
-  form: PersonForm;
+export function CreateContactForm() {
+	let formId = useId();
+	let router = useRouter();
+
+	let [state, formAction] = useFormState(createContact, null);
+	let { pending } = useFormStatus();
+
+	if (state?.ok) {
+		router.push(`/${state.data?.id}`);
+	}
+
+	return (
+		<div className="editor-root">
+			<form id={formId} action={formAction}>
+				<div className="grid">
+					<div>
+						<label htmlFor="name">Name</label>
+						<input
+							type="text"
+							maxLength={20}
+							name="name"
+							defaultValue={defaultValues.name}
+							required
+						/>
+					</div>
+					<div>
+						<label htmlFor="city">City</label>
+						<input
+							type="text"
+							maxLength={20}
+							name="city"
+							defaultValue={defaultValues.city}
+							required
+						/>
+					</div>
+
+					<div>
+						<label htmlFor="age">Age</label>
+						<input type="number" name="age" defaultValue={defaultValues.age} />
+					</div>
+				</div>
+				<div className="tray">
+					<button type="submit" aria-disabled={pending}>
+						Submit
+					</button>
+				</div>
+			</form>
+		</div>
+	);
 }
 
-export const Form = ({ formId, initialValues, create = true }: IFormProps) => {
-  const router = useRouter();
-  const contentType = "application/json";
+export function EditContactForm({ age, name, city, id }: ContactFormProps) {
+	let formId = useId();
+	let router = useRouter();
 
-  const [{ form, message, errors }, setState] = useState<IFormState>({
-    message: null,
-    errors: {},
-    form: {
-      ...initialValues,
-    },
-  });
+	let [state, formAction] = useFormState(updateContact, null);
+	let { pending } = useFormStatus();
 
-  const putData = async (form: PersonForm) => {
-    const { id } = router.query;
+	if (state?.ok) {
+		router.push(`/${id}`);
+	}
 
-    try {
-      const res = await fetch(`/api/people/${id}`, {
-        method: "PUT",
-        headers: {
-          Accept: contentType,
-          "Content-Type": contentType,
-        },
-        body: JSON.stringify(form),
-      });
+	return (
+		<div className="editor-root">
+			<form id={formId} action={formAction}>
+				<input type="hidden" name="id" value={id} />
+				<div className="grid">
+					<div>
+						<label htmlFor="name">Name</label>
+						<input type="text" maxLength={20} name="name" defaultValue={name} />
+					</div>
+					<div>
+						<label htmlFor="city">City</label>
+						<input
+							type="text"
+							maxLength={20}
+							name="city"
+							defaultValue={city}
+							required
+						/>
+					</div>
 
-      if (!res.ok) {
-        throw new Error(res.status.toString());
-      }
-
-      const { data } = await res.json();
-
-      mutate(`/api/people/${id}`, data, false);
-      router.push("/");
-    } catch (error) {
-      setState(
-        produce((draft) => {
-          draft.message = "Failed to add person";
-        })
-      );
-    }
-  };
-
-  const postData = async (form: PersonForm) => {
-    try {
-      const res = await fetch("/api/people", {
-        method: "POST",
-        headers: {
-          Accept: contentType,
-          "Content-Type": contentType,
-        },
-        body: JSON.stringify(form),
-      });
-
-      if (!res.ok) {
-        throw new Error(res.status.toString());
-      }
-
-      router.push("/");
-    } catch (error) {
-      setState(
-        produce((draft) => {
-          draft.message = "Failed to add person";
-        })
-      );
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<any>) => {
-    const target = e.target;
-    const value = target.value;
-    const name = target.name as keyof PersonForm;
-    setState(
-      produce((draft) => {
-        draft.message = null;
-        return {
-          ...draft,
-          form: {
-            ...draft.form,
-            [name]: value,
-          },
-        };
-      })
-    );
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const errs = formValidate();
-    if (Object.keys(errs).length === 0) {
-      create ? postData(form) : putData(form);
-    } else {
-      setState(
-        produce((draft) => {
-          draft.errors = errs;
-        })
-      );
-    }
-  };
-
-  const formValidate = (): Partial<Record<keyof PersonForm, string>> => {
-    let err: any = {};
-    if (!form.name) err.name = "Name is required";
-    if (!form.age) err.age = "Age is required";
-    if (!form.city) err.city = "City is required";
-    return err;
-  };
-
-  return (
-    <div className="editor-root">
-      <form id={formId} onSubmit={handleSubmit}>
-        <div className="grid">
-          <div>
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              maxLength={20}
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              required
-            />
-            {errors["name"] && <span className="error">{errors["name"]}</span>}
-          </div>
-          <div>
-            <label htmlFor="city">City</label>
-            <input
-              type="text"
-              maxLength={20}
-              name="city"
-              value={form.city}
-              onChange={handleChange}
-              required
-            />
-
-            {errors["city"] && <span className="error">{errors["city"]}</span>}
-          </div>
-
-          <div>
-            <label htmlFor="age">Age</label>
-            <input type="number" name="age" value={form.age} onChange={handleChange} />
-            {errors["age"] && <span className="error">{errors["age"]}</span>}
-          </div>
-        </div>
-        <div className="tray">
-          <button type="submit">Submit</button>
-        </div>
-      </form>
-      {message && <p>{message}</p>}
-    </div>
-  );
-};
+					<div>
+						<label htmlFor="age">Age</label>
+						<input type="number" name="age" defaultValue={age} />
+					</div>
+				</div>
+				<div className="tray">
+					<button type="submit" aria-disabled={pending}>
+						Submit
+					</button>
+				</div>
+			</form>
+		</div>
+	);
+}
