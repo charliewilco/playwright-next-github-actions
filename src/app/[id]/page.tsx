@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Avatar } from "../../components/named-avatar";
 import { DeletePrompt } from "../../components/delete-prompt";
-import { getPeople, getPerson } from "../../lib/people";
+import { getPeople, getPerson } from "../actions";
 
 export async function generateStaticParams() {
 	let contacts = await getPeople();
@@ -14,10 +14,14 @@ export async function generateStaticParams() {
 export let revalidate = 60;
 
 export const metadata: Metadata = {
-	title: "Edit Person"
-}
+	title: "Edit Person",
+};
 
-export default async function DetailsPage({ params: { id } }: { params: { id: string } }) {
+export default async function DetailsPage({
+	params: { id },
+}: {
+	params: { id: string };
+}) {
 	let person = await getPerson(id);
 
 	if (!person) {
@@ -32,8 +36,8 @@ export default async function DetailsPage({ params: { id } }: { params: { id: st
 					<h1>{person.name}</h1>
 				</div>
 				<div>
-					<Link href="/[id]/edit" as={`/${person._id}/edit`} passHref>
-						<button>Edit</button>
+					<Link href="/[id]/edit" as={`/${person._id}/edit`}>
+						<button type="button">Edit</button>
 					</Link>
 					<DeletePrompt id={id} />
 				</div>

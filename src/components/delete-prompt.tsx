@@ -1,29 +1,33 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { deleteContact } from "../app/actions";
 
 interface DeletePromptProps {
 	id: string;
 }
 
-export function DeletePrompt(props: DeletePromptProps) {
-	let [message, setMessage] = useState("");
+export function DeletePrompt({ id }: DeletePromptProps) {
 	let router = useRouter();
-	let handleDelete = useCallback(async () => {
-		try {
-			await fetch(`/api/people/${props.id}`, {
-				method: "DELETE",
-			});
-			router.push("/");
-		} catch (error) {
-			setMessage("Failed to delete the person.");
-		}
-	}, [props.id, setMessage, router]);
+
+	let [, startTransition] = useTransition();
 
 	return (
 		<div>
-			{message && <p>{message}</p>}
-			<button onClick={handleDelete}>Delete</button>
+			<button
+				type="button"
+				onClick={() => {
+					startTransition(() => {
+						deleteContact(id).then((result) => {
+							if (result.ok) {
+								router.push("/");
+							}
+						});
+					});
+				}}
+			>
+				Delete
+			</button>
 		</div>
 	);
 }

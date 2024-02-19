@@ -19,11 +19,11 @@ export function ContactCard(props: ContactCardProps) {
 				</div>
 			</div>
 			<div className="card-actions">
-				<Link href="/[id]/edit" as={`/${props.id}/edit`} passHref>
-					<button>Edit</button>
+				<Link href="/[id]/edit" as={`/${props.id}/edit`}>
+					<button type="button">Edit</button>
 				</Link>
-				<Link href="/[id]" as={`/${props.id}`} passHref>
-					<button>Details</button>
+				<Link href="/[id]" as={`/${props.id}`}>
+					<button type="button">Details</button>
 				</Link>
 			</div>
 		</div>

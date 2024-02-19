@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { EditConactForm as EditContactForm } from "../../../components/contact-editor";
-import { getPerson } from "../../../lib/people";
+import { EditContactForm } from "../../../components/contact-editor";
+import { getPerson } from "../../actions";
 
 interface Params {
 	params: { id: string };
@@ -13,7 +13,11 @@ export async function generateMetadata({ params }: Params) {
 	};
 }
 
-export default async function EditPerson({ params }: { params: { id: string } }) {
+export default async function EditPerson({
+	params,
+}: {
+	params: { id: string };
+}) {
 	let data = await getPerson(params.id);
 
 	if (data === null) {
@@ -22,7 +26,12 @@ export default async function EditPerson({ params }: { params: { id: string } })
 
 	return (
 		<div>
-			<EditContactForm initialValues={{ ...data }} id={params.id} />
+			<EditContactForm
+				name={data.name}
+				age={data.age}
+				city={data.city}
+				id={params.id}
+			/>
 		</div>
 	);
 }

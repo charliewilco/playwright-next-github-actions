@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ContactCard } from "../components/card";
-import { getPeople } from "../lib/people";
+import { getPeople } from "./actions";
 
 export const metadata: Metadata = {
 	title: "MongoDB Next.js Demo",
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default async function IndexPage() {
 	let people = await getPeople();
 
-	let content;
+	let content: JSX.Element | JSX.Element[];
 
 	if (people.length === 0) {
 		content = <p className="empty">No people found</p>;

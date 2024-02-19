@@ -1,8 +1,8 @@
 "use client";
-import { useCallback, useState, useId } from "react";
+import { useId } from "react";
+import { useFormState, useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
-import { mutate } from "swr";
-import { produce } from "immer";
+import { createContact, updateContact } from "../app/actions";
 
 type ContactFormValues = {
 	name: string;
@@ -18,115 +18,25 @@ export let defaultValues: ContactFormValues = {
 
 interface ContactFormProps {
 	id: string;
-	initialValues: ContactFormValues;
-}
-
-interface ContactFormState {
-	message: string | null;
-	errors: Partial<Record<keyof ContactFormValues, string>>;
-	form: ContactFormValues;
-}
-
-function formValidate(values: ContactFormValues) {
-	let errors: Partial<Record<keyof ContactFormValues, string>> = {};
-
-	if (!values.name) {
-		errors.name = "Name is required";
-	}
-
-	if (!values.city) {
-		errors.city = "City is required";
-	}
-
-	if (!values.age) {
-		errors.age = "Age is required";
-	}
-
-	return errors;
+	age: number;
+	name: string;
+	city: string;
 }
 
 export function CreateContactForm() {
-	let id = useId();
-
-	let [{ form, message, errors }, setState] = useState<ContactFormState>({
-		message: null,
-		errors: {},
-		form: {
-			...defaultValues,
-		},
-	});
-
+	let formId = useId();
 	let router = useRouter();
 
-	let postData = useCallback(
-		async (form: ContactFormValues) => {
-			try {
-				let res = await fetch("/api/people", {
-					method: "POST",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(form),
-				});
+	let [state, formAction] = useFormState(createContact, null);
+	let { pending } = useFormStatus();
 
-				if (!res.ok) {
-					throw new Error(res.status.toString());
-				}
-
-				router.push("/");
-			} catch (error) {
-				setState(
-					produce((draft) => {
-						draft.message = "Failed to add person";
-					})
-				);
-			}
-		},
-		[setState, router]
-	);
-
-	let handleChange = useCallback(
-		(e: React.ChangeEvent<any>) => {
-			let target = e.target;
-			let value = target.value;
-			let name = target.name as keyof ContactFormValues;
-			setState(
-				produce((draft) => {
-					draft.message = null;
-					return {
-						...draft,
-						form: {
-							...draft.form,
-							[name]: value,
-						},
-					};
-				})
-			);
-		},
-		[setState]
-	);
-
-	let handleSubmit = useCallback(
-		(e: React.FormEvent<HTMLFormElement>) => {
-			e.preventDefault();
-			let errs = formValidate(form);
-			if (Object.keys(errs).length === 0) {
-				postData(form);
-			} else {
-				setState(
-					produce((draft) => {
-						draft.errors = errs;
-					})
-				);
-			}
-		},
-		[postData, form]
-	);
+	if (state?.ok) {
+		router.push(`/${state.data?.id}`);
+	}
 
 	return (
 		<div className="editor-root">
-			<form id={id} onSubmit={handleSubmit}>
+			<form id={formId} action={formAction}>
 				<div className="grid">
 					<div>
 						<label htmlFor="name">Name</label>
@@ -134,11 +44,9 @@ export function CreateContactForm() {
 							type="text"
 							maxLength={20}
 							name="name"
-							value={form.name}
-							onChange={handleChange}
+							defaultValue={defaultValues.name}
 							required
 						/>
-						{errors["name"] && <span className="error">{errors["name"]}</span>}
 					</div>
 					<div>
 						<label htmlFor="city">City</label>
@@ -146,130 +54,45 @@ export function CreateContactForm() {
 							type="text"
 							maxLength={20}
 							name="city"
-							value={form.city}
-							onChange={handleChange}
+							defaultValue={defaultValues.city}
 							required
 						/>
-
-						{errors["city"] && <span className="error">{errors["city"]}</span>}
 					</div>
 
 					<div>
 						<label htmlFor="age">Age</label>
-						<input
-							type="number"
-							name="age"
-							value={form.age}
-							onChange={handleChange}
-						/>
-						{errors["age"] && <span className="error">{errors["age"]}</span>}
+						<input type="number" name="age" defaultValue={defaultValues.age} />
 					</div>
 				</div>
 				<div className="tray">
-					<button type="submit">Submit</button>
+					<button type="submit" aria-disabled={pending}>
+						Submit
+					</button>
 				</div>
 			</form>
-			{message && <p>{message}</p>}
 		</div>
 	);
 }
 
-export function EditConactForm(props: ContactFormProps) {
-	let id = useId();
+export function EditContactForm({ age, name, city, id }: ContactFormProps) {
+	let formId = useId();
 	let router = useRouter();
 
-	let [{ form, message, errors }, setState] = useState<ContactFormState>({
-		message: null,
-		errors: {},
-		form: {
-			...props.initialValues,
-		},
-	});
+	let [state, formAction] = useFormState(updateContact, null);
+	let { pending } = useFormStatus();
 
-	let putData = useCallback(
-		async (form: ContactFormValues) => {
-			try {
-				let res = await fetch(`/api/people/${props.id}`, {
-					method: "PUT",
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(form),
-				});
-
-				if (!res.ok) {
-					throw new Error(res.status.toString());
-				}
-
-				let { data } = await res.json();
-
-				mutate(`/api/people/${props.id}`, data, false);
-				router.push("/");
-			} catch (error) {
-				setState(
-					produce((draft) => {
-						draft.message = "Failed to add person";
-					})
-				);
-			}
-		},
-		[props.id, router, setState]
-	);
-
-	let handleChange = useCallback(
-		(e: React.ChangeEvent<any>) => {
-			let target = e.target;
-			let value = target.value;
-			let name = target.name as keyof ContactFormValues;
-			setState(
-				produce((draft) => {
-					draft.message = null;
-					return {
-						...draft,
-						form: {
-							...draft.form,
-							[name]: value,
-						},
-					};
-				})
-			);
-		},
-		[setState]
-	);
-
-	let handleSubmit = useCallback(
-		(e: React.FormEvent<HTMLFormElement>) => {
-			e.preventDefault();
-			let errs = formValidate(form);
-			if (Object.keys(errs).length === 0) {
-				putData(form);
-			} else {
-				setState(
-					produce((draft) => {
-						draft.errors = errs;
-					})
-				);
-			}
-		},
-		[form, putData]
-	);
+	if (state?.ok) {
+		router.push(`/${id}`);
+	}
 
 	return (
 		<div className="editor-root">
-			<form id={id} onSubmit={handleSubmit}>
+			<form id={formId} action={formAction}>
+				<input type="hidden" name="id" value={id} />
 				<div className="grid">
 					<div>
 						<label htmlFor="name">Name</label>
-						<input
-							type="text"
-							maxLength={20}
-							name="name"
-							value={form.name}
-							onChange={handleChange}
-							required
-						/>
-						{errors["name"] && <span className="error">{errors["name"]}</span>}
+						<input type="text" maxLength={20} name="name" defaultValue={name} />
 					</div>
 					<div>
 						<label htmlFor="city">City</label>
@@ -277,30 +100,22 @@ export function EditConactForm(props: ContactFormProps) {
 							type="text"
 							maxLength={20}
 							name="city"
-							value={form.city}
-							onChange={handleChange}
+							defaultValue={city}
 							required
 						/>
-
-						{errors["city"] && <span className="error">{errors["city"]}</span>}
 					</div>
 
 					<div>
 						<label htmlFor="age">Age</label>
-						<input
-							type="number"
-							name="age"
-							value={form.age}
-							onChange={handleChange}
-						/>
-						{errors["age"] && <span className="error">{errors["age"]}</span>}
+						<input type="number" name="age" defaultValue={age} />
 					</div>
 				</div>
 				<div className="tray">
-					<button type="submit">Submit</button>
+					<button type="submit" aria-disabled={pending}>
+						Submit
+					</button>
 				</div>
 			</form>
-			{message && <p>{message}</p>}
 		</div>
 	);
 }
